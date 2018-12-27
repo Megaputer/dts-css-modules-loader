@@ -1,17 +1,15 @@
 # typed-css-modules-loader
 Replacement for the [typings-for-css-modules-loader](https://github.com/Jimdo/typings-for-css-modules-loader). This loader does not make any changes in content of styles, just creates `*.d.ts` file during the work. It is assumed that the content will be preprocessed first by [css-loader](https://github.com/webpack-contrib/css-loader).
 
-# Installation
+## Installation
 
-```
-npm i -DE Megaputer/typed-css-modules-loader
-```
-or
-```
-yarn add -DE Megaputer/typed-css-modules-loader
+```bash
+npm i -DE Megaputer/dts-css-modules-loader
+# or
+yarn add -DE Megaputer/dts-css-modules-loader
 ```
 
-# Usage
+## Usage
 
 ```js
 {
@@ -21,13 +19,13 @@ yarn add -DE Megaputer/typed-css-modules-loader
       loader: 'typed-css-modules-loader',
       options: {
         namedExport: true,
-        banner: "// This file is generated automatically."
+        banner: "// This file is generated automatically"
       }
     },
     {
       loader: 'css-loader',
       options: {
-        modules: true,
+        modules: true, // this option must be enabled
         camelCase: 'only',
         localIdentName: '[local]',
         exportOnlyLocals: true
@@ -38,8 +36,8 @@ yarn add -DE Megaputer/typed-css-modules-loader
 }
 ```
 
-# Options
-## `namedExport`
+## Options
+### `namedExport`
 When the option is switched on classes exported as variables. Be sure you using `camelCase` option of [css-loader](https://github.com/webpack-contrib/css-loader) to avoid invalid name of variables.
 
 ```ts
@@ -59,8 +57,26 @@ declare const styles: I_buttonScss;
 export default styles;
 ```
 
-## `banner`
+### `banner`
 Adds a "banner" prefix to each generated file.
 
-# License
+## Usage in Typescript
+
+```ts
+import * as styles from './_button.scss';
+```
+
+To avoid errors about the absent module, you need to determine this:
+```ts
+/**
+ * Trap for `*.scss.d.ts` files which are not generated yet.
+ */
+declare module '*.scss' {
+  var classes: any;
+  export = classes;
+}
+```
+When you add new classname Typescript compiler may not find the generated variable so you need to compile twice your files.
+
+## License
 Licensed under the MIT license.
