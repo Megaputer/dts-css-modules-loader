@@ -1,8 +1,7 @@
-# typed-css-modules-loader
+# dts-css-modules-loader
 Replacement for the [typings-for-css-modules-loader](https://github.com/Jimdo/typings-for-css-modules-loader). This loader does not make any changes in content of styles, just creates `*.d.ts` file during the work. It is assumed that the content will be preprocessed first by [css-loader](https://github.com/webpack-contrib/css-loader).
 
 ## Installation
-
 ```bash
 npm i -DE Megaputer/dts-css-modules-loader
 # or
@@ -10,7 +9,6 @@ yarn add -DE Megaputer/dts-css-modules-loader
 ```
 
 ## Usage
-
 ```js
 {
   test: /\.scss$/,
@@ -61,7 +59,6 @@ export default styles;
 Adds a "banner" prefix to each generated file.
 
 ## Usage in Typescript
-
 ```ts
 import * as styles from './_button.scss';
 ```
