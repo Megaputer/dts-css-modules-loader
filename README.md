@@ -3,9 +3,9 @@ Replacement for the [typings-for-css-modules-loader](https://github.com/Jimdo/ty
 
 ## Installation
 ```bash
-npm i -DE Megaputer/dts-css-modules-loader
+npm i -D dts-css-modules-loader
 # or
-yarn add -DE Megaputer/dts-css-modules-loader
+yarn add -D dts-css-modules-loader
 ```
 
 ## Usage
@@ -14,7 +14,7 @@ yarn add -DE Megaputer/dts-css-modules-loader
   test: /\.scss$/,
   use: [
     {
-      loader: 'typed-css-modules-loader',
+      loader: 'dts-css-modules-loader',
       options: {
         namedExport: true,
         banner: "// This file is generated automatically"
