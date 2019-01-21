@@ -27,7 +27,7 @@ module.exports = function(content) {
       const i = getInterfaceName(this.resourcePath);
       typings += `export interface ${i} {\n`;
       for (let c of classes) {
-        typings += `  '${c}': string\n`;
+        typings += `  '${c}': string;\n`;
       }
       typings += `}\ndeclare const styles: ${i};\nexport default styles;\n`;
     }
