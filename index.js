@@ -60,7 +60,7 @@ function getClasses(content) {
   return classes;
 }
 
-const classesRegex = /"([^"\\]+)":/g;
+const classesRegex = /"([^"\\/;()\n]+)":/g;
 
 /**
  * @param {string} [path]
