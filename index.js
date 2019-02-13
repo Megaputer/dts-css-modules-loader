@@ -17,7 +17,7 @@ module.exports = function(content) {
   }
 
   {
-    let classes = getClasses(content);
+    const classes = getClasses(content);
 
     if (options.namedExport) {
       for (let c of classes) {
@@ -49,11 +49,20 @@ function getClasses(content) {
   /** @type {string[]} */
   let classes = [];
 
-  /** @type {RegExpExecArray} */
-  let match;
-  while (match = classesRegex.exec(content)) {
-    if (classes.indexOf(match[1]) === -1) {
-      classes.push(match[1]);
+  // when `exportOnlyLocals` is on
+  let from = content.indexOf('module.exports = {');
+  // when `exportOnlyLocals` is off
+  from = ~from ? from : content.indexOf('exports.locals = {');
+
+  if (~from) {
+    content = content.substr(from);
+
+    /** @type {RegExpExecArray} */
+    let match;
+    while (match = classesRegex.exec(content)) {
+      if (classes.indexOf(match[1]) === -1) {
+        classes.push(match[1]);
+      }
     }
   }
 
