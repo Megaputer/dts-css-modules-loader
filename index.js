@@ -25,11 +25,12 @@ module.exports = function(content) {
       }
     } else {
       const i = getInterfaceName(this.resourcePath);
+      const exportName = options.exportName || 'styles';
       typings += `export interface ${i} {\n`;
       for (let c of classes) {
         typings += `  '${c}': string;\n`;
       }
-      typings += `}\ndeclare const styles: ${i};\nexport default styles;\n`;
+      typings += `}\nexport const ${exportName}: ${i};\nexport default ${exportName};\n`;
     }
   }
 

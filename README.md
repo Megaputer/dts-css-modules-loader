@@ -51,9 +51,30 @@ export interface I_buttonScss {
   'button': string
   'buttonActive': string
 }
-declare const styles: I_buttonScss;
+export const styles: I_buttonScss;
 export default styles;
 ```
+
+### `exportName`
+
+You can specify exported variable name if "namedExport" is switched off:
+```js
+{
+  test: /\.scss$/,
+  use: [
+    {
+      loader: 'dts-css-modules-loader',
+      options: {
+        exportName: 'classes'
+      }
+    },
+    // ...
+}
+```
+```ts
+import { classes } from './your.css';
+```
+This option is usefull if default exports are deprecated by your linter.
 
 ### `banner`
 Adds a "banner" prefix to each generated file.
