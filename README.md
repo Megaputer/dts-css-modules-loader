@@ -16,17 +16,16 @@ yarn add -D dts-css-modules-loader
     {
       loader: 'dts-css-modules-loader',
       options: {
-        namedExport: true,
         banner: "// This file is generated automatically"
       }
     },
     {
       loader: 'css-loader',
       options: {
-        modules: true, // this option must be enabled
-        camelCase: 'only',
+        modules: true, // enable the CSS Modules
+        exportOnlyLocals: true // export class names as variables
+        camelCase: 'only', // generate valid name of variables
         localIdentName: '[local]',
-        exportOnlyLocals: true
       }
     },
     'sass-loader'
@@ -35,32 +34,38 @@ yarn add -D dts-css-modules-loader
 ```
 
 ## Options
-### `namedExport`
-When the option is switched on classes exported as variables. Be sure you using `camelCase` option of [css-loader](https://github.com/webpack-contrib/css-loader) to avoid invalid name of variables.
-
-```ts
-// This file is generated automatically.
-export const button: string;
-export const buttonActive: string;
-```
-
-When option is off:
-```ts
-// This file is generated automatically.
-export interface I_buttonScss {
-  'button': string
-  'buttonActive': string
-}
-declare const styles: I_buttonScss;
-export default styles;
-```
-
 ### `banner`
 Adds a "banner" prefix to each generated file.
 
-## Usage in Typescript
+## css-loader
+As loader uses output of `css-loader`, generated typings depends on it's options.
+
+When [exportOnlyLocals](https://github.com/webpack-contrib/css-loader#exportonlylocals) is on, class names exported as variables:
 ```ts
-import * as styles from './_button.scss';
+export const button: string;
+export const buttonActive: string;
+```
+Be sure you using [camelCase](https://github.com/webpack-contrib/css-loader#camelcase) to avoid invalid name of variables.
+
+When option is off, will be generated following typings:
+```ts
+export interface I_buttonScss {
+  'paButton': string;
+  'paButtonActive': string;
+}
+export const locals: I_buttonScss;
+```
+
+## Usage in Typescript
+
+With `exportOnlyLocals`:
+```ts
+import * as classes from './_button.scss';
+```
+
+Without:
+```ts
+import { locals as classes } from './_button.scss';
 ```
 
 To avoid errors about the absent module, you need to determine this:
@@ -73,7 +78,7 @@ declare module '*.scss' {
   export = classes;
 }
 ```
-When you add new classname Typescript compiler may not find the generated variable so you need to compile twice your files.
+When you add new class name, Typescript compiler may not find the generated variable so you need to compile twice your files.
 
 ## License
 Licensed under the MIT license.
