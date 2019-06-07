@@ -17,9 +17,9 @@ module.exports = function(content) {
   }
 
   {
-    const { classes, exportOnlyLocals } = getClasses(content);
+    const classes = getClasses(content);
 
-    if (exportOnlyLocals) {
+    if (options.namedExport) {
       for (let c of classes) {
         typings += `export const ${c}: string;\n`;
       }
@@ -29,7 +29,7 @@ module.exports = function(content) {
       for (let c of classes) {
         typings += `  '${c}': string;\n`;
       }
-      typings += `}\nexport const locals: ${i};\n`;
+      typings += `}\ndeclare const styles: ${i};\nexport default styles;\n`;
     }
   }
 
@@ -48,16 +48,13 @@ function getClasses(content) {
 
   /** @type {string[]} */
   let classes = [];
-  let exportOnlyLocals = true;
 
-  // check `exportOnlyLocals` is on
+  // when `exportOnlyLocals` is on
   let from = content.indexOf('module.exports = {');
-  if (from === -1) {
-    exportOnlyLocals = false;
-    from = content.indexOf('exports.locals = {');
-  }
+  // when `exportOnlyLocals` is off
+  from = ~from ? from : content.indexOf('exports.locals = {');
 
-  if (from !== -1) {
+  if (~from) {
     content = content.substr(from);
 
     /** @type {RegExpExecArray} */
@@ -69,10 +66,7 @@ function getClasses(content) {
     }
   }
 
-  return {
-    classes,
-    exportOnlyLocals
-  };
+  return classes;
 }
 
 const classesRegex = /"([^"\\/;()\n]+)":/g;
