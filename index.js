@@ -49,9 +49,9 @@ function getClasses(content) {
   /** @type {string[]} */
   let classes = [];
 
-  // when `exportOnlyLocals` is on
+  // when `onlyLocals` is on
   let from = content.indexOf('module.exports = {');
-  // when `exportOnlyLocals` is off
+  // when `onlyLocals` is off
   from = ~from ? from : content.indexOf('exports.locals = {');
 
   if (~from) {
