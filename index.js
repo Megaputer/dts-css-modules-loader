@@ -20,7 +20,8 @@ module.exports = function(content) {
     const classes = getClasses(content);
 
     if (options.namedExport) {
-      for (let c of classes) {
+      const isValidES6Identifier = require('./is-valid-es6-identifier');
+      for (let c of classes.filter(isValidES6Identifier)) {
         typings += `export const ${c}: string;\n`;
       }
     } else {
