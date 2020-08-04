@@ -1,5 +1,5 @@
 # dts-css-modules-loader
-Replacement for the [typings-for-css-modules-loader](https://github.com/Jimdo/typings-for-css-modules-loader). This loader does not make any changes in content of styles, just creates `*.d.ts` file during the work. It is assumed that the content will be preprocessed first by [css-loader](https://github.com/webpack-contrib/css-loader). Currently supported versions 2 and 3 of the `css-loader`.
+Replacement for the [typings-for-css-modules-loader](https://github.com/Jimdo/typings-for-css-modules-loader). This loader does not make any changes in content of styles, just creates `*.d.ts` file during the work. It is assumed that the content will be preprocessed first by [css-loader](https://github.com/webpack-contrib/css-loader). Currently supported versions 2, 3 and 4 of the `css-loader`.
 
 ## Installation
 ```bash
@@ -13,6 +13,7 @@ yarn add -D dts-css-modules-loader
 {
   test: /\.scss$/,
   use: [
+    'style-loader',
     {
       loader: 'dts-css-modules-loader',
       options: {
@@ -23,18 +24,17 @@ yarn add -D dts-css-modules-loader
     {
       loader: 'css-loader',
       options: {
-        modules: { // this option must be enabled
+        // options for the v4 of css-loader
+        modules: {
+          exportLocalsConvention: 'camelCaseOnly',
           localIdentName: '[local]'
         }
-        localsConvention: 'camelCaseOnly',
-        onlyLocals: true
       }
     },
     'sass-loader'
   ]
 }
 ```
-`css-loader` options presented for the third version.
 
 ## Options
 ### `namedExport`
@@ -54,7 +54,7 @@ export interface I_buttonScss {
   'buttonActive': string
 }
 declare const styles: I_buttonScss;
-export default styles;
+export = styles;
 ```
 
 ### `banner`

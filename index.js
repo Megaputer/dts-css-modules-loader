@@ -18,7 +18,6 @@ module.exports = function(content) {
 
   {
     const classes = getClasses(content);
-
     if (options.namedExport) {
       for (let c of classes) {
         typings += `export const ${c}: string;\n`;
@@ -29,7 +28,7 @@ module.exports = function(content) {
       for (let c of classes) {
         typings += `  '${c}': string;\n`;
       }
-      typings += `}\ndeclare const styles: ${i};\nexport default styles;\n`;
+      typings += `}\ndeclare const styles: ${i};\nexport = styles;\n`;
     }
   }
 
@@ -48,18 +47,31 @@ function getClasses(content) {
 
   /** @type {string[]} */
   let classes = [];
+  let isCssLoader4NamedExport = false;
 
-  // when `onlyLocals` is on
-  let from = content.indexOf('module.exports = {');
-  // when `onlyLocals` is off
-  from = ~from ? from : content.indexOf('exports.locals = {');
+  // check v4
+  let from = content.indexOf('___CSS_LOADER_EXPORT___.locals = {');
+  if (from === -1) {
+    from = content.indexOf('export const ');
+    isCssLoader4NamedExport = from !== -1;
+  }
+  // check v3
+  if (from === -1) {
+    // when `onlyLocals` is on
+    from = content.indexOf('module.exports = {');
+  }
+  if (from === -1) {
+    // when `onlyLocals` is off
+    from = content.indexOf('exports.locals = {');
+  }
 
   if (~from) {
     content = content.substr(from);
 
     /** @type {RegExpExecArray} */
     let match;
-    while (match = classesRegex.exec(content)) {
+    const regex = isCssLoader4NamedExport ? classesOfNamedExportRegex : classesRegex;
+    while (match = regex.exec(content)) {
       if (classes.indexOf(match[1]) === -1) {
         classes.push(match[1]);
       }
@@ -70,6 +82,7 @@ function getClasses(content) {
 }
 
 const classesRegex = /"([^"\\/;()\n]+)":/g;
+const classesOfNamedExportRegex = /export const (\w+) =/g;
 
 /**
  * @param {string} [path]
