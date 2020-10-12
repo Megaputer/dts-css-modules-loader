@@ -7,6 +7,7 @@ const loaderUtils = require('loader-utils');
 module.exports = function(content) {
   this.cacheable && this.cacheable();
 
+  /** @type {{ banner?: string, namedExport?: boolean, customTypings?: (classes: string[]) => string }} */
   const options = loaderUtils.getOptions(this) || {};
   const callback = this.async();
 
@@ -18,7 +19,9 @@ module.exports = function(content) {
 
   {
     const classes = getClasses(content);
-    if (options.namedExport) {
+    if (options.customTypings) {
+      typings = options.customTypings(classes);
+    } else if (options.namedExport) {
       for (let c of classes) {
         typings += `export const ${c}: string;\n`;
       }

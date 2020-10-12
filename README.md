@@ -60,6 +60,20 @@ export = styles;
 ### `banner`
 Adds a "banner" prefix to each generated file.
 
+### `customTypings`
+A function that accepts classes (an array of string) and returns the content of declaration file:
+```js
+customTypings: classes => {
+  let content = '// This file is generated automatically\ndeclare const styles: {\n';
+  for (const c of classes) {
+    content += `  ${c}: string;\n`;
+  }
+  content += '};\nexport default styles;\n';
+  return content;
+}
+```
+`namedExport` option will be ignored
+
 ## Usage in Typescript
 ```ts
 import * as styles from './_button.scss';
