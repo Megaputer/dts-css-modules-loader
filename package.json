@@ -1,12 +1,12 @@
 {
   "name": "dts-css-modules-loader",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "webpack loader to generate typings for css modules",
   "dependencies": {
     "loader-utils": "^2.0.0"
   },
   "peerDependencies": {
-    "css-loader": "^2.0.0 || ^3.0.0 || ^4.0.0"
+    "css-loader": "^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0"
   },
   "keywords": [
     "css-modules",
