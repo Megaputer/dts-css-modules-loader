@@ -4,21 +4,30 @@ const fp = require('path');
 const loaderUtils = require('loader-utils');
 
 /** @type {import('webpack').loader.Loader} */
-module.exports = function(content) {
+module.exports = function (content) {
   this.cacheable && this.cacheable();
 
-  /** @type {{ banner?: string, namedExport?: boolean, customTypings?: (classes: string[]) => string }} */
+  /**
+   * @type {{
+   *   banner?: string,
+   *   namedExport?: boolean,
+   *   customTypings?: (classes: string[]) => string,
+   *   dropEmptyFile?: boolean
+   * }}
+   */
   const options = loaderUtils.getOptions(this) || {};
   const callback = this.async();
 
-  let typings = '';
+  const classes = getClasses(content);
+  const dtsPath = getDtsPath(this.resourcePath);
 
-  if (options.banner) {
-    typings = `${options.banner}\n`;
-  }
+  if (options.dropEmptyFile && classes.length === 0) {
+    if (fs.existsSync(dtsPath)) {
+      fs.rmSync(dtsPath);
+    }
+  } else {
+    let typings = options.banner ? `${options.banner}\n` : '';
 
-  {
-    const classes = getClasses(content);
     if (options.customTypings) {
       typings = options.customTypings(classes);
     } else if (options.namedExport) {
@@ -33,9 +42,9 @@ module.exports = function(content) {
       }
       typings += `}\ndeclare const styles: ${i};\nexport = styles;\n`;
     }
-  }
 
-  fs.writeFileSync(getDtsPath(this.resourcePath), typings);
+    fs.writeFileSync(dtsPath, typings);
+  }
 
   callback(null, content);
 };
@@ -74,7 +83,7 @@ function getClasses(content) {
     /** @type {RegExpExecArray} */
     let match;
     const regex = isCssLoader4NamedExport ? classesOfNamedExportRegex : classesRegex;
-    while (match = regex.exec(content)) {
+    while ((match = regex.exec(content))) {
       if (classes.indexOf(match[1]) === -1) {
         classes.push(match[1]);
       }
@@ -98,7 +107,8 @@ function getDtsPath(path) {
  * @param {string} [path]
  */
 function getInterfaceName(path) {
-  return fp.basename(path)
+  return fp
+    .basename(path)
     .replace(/^(\w)/, (_, c) => 'I' + c.toUpperCase())
     .replace(/\W+(\w)/g, (_, c) => c.toUpperCase());
 }

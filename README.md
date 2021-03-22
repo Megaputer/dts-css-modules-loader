@@ -13,18 +13,22 @@ yarn add -D dts-css-modules-loader
 {
   test: /\.scss$/,
   use: [
-    'style-loader',
+    {
+      loader: 'style-loader',
+      options: {
+        esModule: false,
+      },
+    },
     {
       loader: 'dts-css-modules-loader',
       options: {
-        namedExport: true,
-        banner: "// This file is generated automatically"
+        namedExport: true
       }
     },
     {
       loader: 'css-loader',
       options: {
-        // options for the v4 of css-loader
+        // options for the v5 of css-loader
         modules: {
           exportLocalsConvention: 'camelCaseOnly',
           localIdentName: '[local]'
@@ -72,7 +76,10 @@ customTypings: classes => {
   return content;
 }
 ```
-`namedExport` option will be ignored
+`namedExport` and `banner` option will be ignored
+
+### `dropEmptyFile`
+If there are no classes, the typings file will not be generated, and the existing will be deleted.
 
 ## Usage in Typescript
 ```ts
