@@ -59,13 +59,18 @@ function getClasses(content) {
 
   /** @type {string[]} */
   let classes = [];
-  let isCssLoader4NamedExport = false;
+  let isCssLoaderNamedExport = false;
 
-  // check v4
+  // check v4 / v5
   let from = content.indexOf('___CSS_LOADER_EXPORT___.locals = {');
   if (from === -1) {
-    from = content.indexOf('export const ');
-    isCssLoader4NamedExport = from !== -1;
+    // >= v5.2.5
+    from = content.indexOf('export var ');
+    if (from === -1) {
+      // < v5.2.5
+      from = content.indexOf('export const ');  
+    }
+    isCssLoaderNamedExport = from !== -1;
   }
   // check v3
   if (from === -1) {
@@ -82,7 +87,7 @@ function getClasses(content) {
 
     /** @type {RegExpExecArray} */
     let match;
-    const regex = isCssLoader4NamedExport ? classesOfNamedExportRegex : classesRegex;
+    const regex = isCssLoaderNamedExport ? classesOfNamedExportRegex : classesRegex;
     while ((match = regex.exec(content))) {
       if (classes.indexOf(match[1]) === -1) {
         classes.push(match[1]);
@@ -94,7 +99,7 @@ function getClasses(content) {
 }
 
 const classesRegex = /"([^"\\/;()\n]+)":/g;
-const classesOfNamedExportRegex = /export const (\w+) =/g;
+const classesOfNamedExportRegex = /export (?:var|const) (\w+) =/g;
 
 /**
  * @param {string} [path]
