@@ -43,7 +43,9 @@ module.exports = function (content) {
       typings += `}\ndeclare const styles: ${i};\nexport = styles;\n`;
     }
 
-    fs.writeFileSync(dtsPath, typings);
+    if (!fs.existsSync(dtsPath) || fs.readFileSync(dtsPath, "utf-8") != typings) {
+      fs.writeFileSync(dtsPath, typings, "utf8");
+    }
   }
 
   callback(null, content);
@@ -68,7 +70,7 @@ function getClasses(content) {
     from = content.indexOf('export var ');
     if (from === -1) {
       // < v5.2.5
-      from = content.indexOf('export const ');  
+      from = content.indexOf('export const ');
     }
     isCssLoaderNamedExport = from !== -1;
   }
