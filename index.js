@@ -43,14 +43,7 @@ module.exports = function (content) {
       typings += `}\ndeclare const styles: ${i};\nexport = styles;\n`;
     }
 
-    if (fs.existsSync(dtsPath)) {
-      const currentInput = fs.readFileSync(dtsPath, "utf-8");
-
-      // compare file contents ignoring whitespace
-      if (currentInput.replace(/\s+/g, "") !== typings.replace(/\s+/g, "")) {
-        fs.writeFileSync(dtsPath, typings, "utf8");
-      }
-    } else {
+    if (!fs.existsSync(dtsPath) || fs.readFileSync(dtsPath, "utf-8") != typings) {
       fs.writeFileSync(dtsPath, typings, "utf8");
     }
   }
