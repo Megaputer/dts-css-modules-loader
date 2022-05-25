@@ -1,9 +1,25 @@
 // @ts-check
 const fs = require('fs');
 const fp = require('path');
-const loaderUtils = require('loader-utils');
+const schema = require("./options.json");
 
-/** @type {import('webpack').loader.Loader} */
+/**
+ * @template T
+ * @typedef {Object} LoaderOptions<T>
+ * @type {{
+ *    banner?: string,
+ *    namedExport?: boolean,
+ *    customTypings?: (classes: string[]) => string,
+ *    dropEmptyFile?: boolean
+ * }}
+ * @property {string} [severityError] Allows to choose how errors are displayed.
+ */
+
+/**
+ * @template T
+ * @this {import("webpack").LoaderContext<LoaderOptions<T>>}
+ * @param {Buffer} content
+ */
 module.exports = function (content) {
   this.cacheable && this.cacheable();
 
@@ -15,7 +31,7 @@ module.exports = function (content) {
    *   dropEmptyFile?: boolean
    * }}
    */
-  const options = loaderUtils.getOptions(this) || {};
+  const options = this.getOptions(schema) || {};
   const callback = this.async();
 
   const classes = getClasses(content);
@@ -85,7 +101,7 @@ function getClasses(content) {
   }
 
   if (~from) {
-    content = content.substr(from);
+    content = content.slice(from);
 
     /** @type {RegExpExecArray} */
     let match;

@@ -1,10 +1,7 @@
 {
   "name": "dts-css-modules-loader",
-  "version": "1.2.5",
+  "version": "2.0.0",
   "description": "webpack loader to generate typings for css modules",
-  "dependencies": {
-    "loader-utils": "^2.0.0"
-  },
   "peerDependencies": {
     "css-loader": "^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0"
   },
@@ -18,6 +15,6 @@
   "license": "MIT",
   "homepage": "https://github.com/Megaputer/dts-css-modules-loader",
   "devDependencies": {
-    "@types/webpack": "^4.41.26"
+    "@types/webpack": "^5.28.0"
   }
 }
