@@ -1,0 +1,20 @@
+{
+  "defintions": {
+    "banner": {
+      "description": "When the option is switched on classes exported as variables.",
+      "type": "string"
+    },
+    "namedExport": {
+      "description": "Adds a 'banner' prefix to each generated file",
+      "type": "boolean"
+    },
+    "customTypings": {
+      "description": "Function that accepts classes (an array of string) and returns the content of declaration file",
+      "instanceof": "Function"
+    },
+    "dropEmptyFile": {
+      "description": "If there are no classes, the typings file will not be generated, and the existing will be deleted",
+      "type": "boolean"
+    }
+  }
+}
