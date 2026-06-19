@@ -13,7 +13,14 @@
     "loader"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Megaputer/dts-css-modules-loader.git"
+  },
   "homepage": "https://github.com/Megaputer/dts-css-modules-loader",
+  "bugs": {
+    "url": "https://github.com/Megaputer/dts-css-modules-loader/issues"
+  },
   "devDependencies": {
     "@types/webpack": "^5.28.0"
   }
